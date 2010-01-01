@@ -8,7 +8,7 @@
 * There will be a config.php script which includes all these lib files and starts the db
 
 => Useful functions
-* eval(), shell_exec(), unlink(), mkdir(), rmdir(), scandir()
+* eval(), shell_exec(), unlink(), mkdir(), rmdir(), scandir(), chdir(), getcwd()
 
 => Useful Techniques
 * Variable Variables

@@ -6,4 +6,7 @@
  * Licence: You may redistribute this under Creative Commons License
  */
 
+ $ln = "\n";
+ $cwd = getcwd();
+
 ?>
