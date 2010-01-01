@@ -1,0 +1,8 @@
+* Database will be in a new folder inside the data folder.
+* Each table will be a new file in the folder of database.
+
+-> (To decide about cvs or xml or some other format)
+
+* Users and their permissions will be stored in data/users file
+* All these library files will be stored in data/lib folder
+* There will be a config.php script which includes all these lib files and starts the db
