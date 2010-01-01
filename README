@@ -1,3 +1,9 @@
+ Name: PDQL
+ Description: Php based Database and Query Language
+ Author: Pavan Kumar Sunkara <pavan.sss1991@gmail.com>
+ Copyright: Copyright (C) 2009 Sun Web dev, Inc.
+ Licence: You may redistribute this under Creative Commons License
+
 This project is called as PDQL. It means PHP based Database and Query Language.
 * Generally we use Mysql with PHP to create web applications. But PHP can also be used to create some application in Linux using the php-cli program. When we are creating such a type of program, we need Mysql or some other Database program to use it. This can be used in such cases. 
 * Also when u design a small database web application, you can use this if you find using a big database program like MySql is absolutely unnecessary.
