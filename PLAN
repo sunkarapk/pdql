@@ -1,0 +1,19 @@
+* Database will be in a new folder inside the data folder.
+* Each table will be a new file in the folder of database.
+
+-> (To decide about csv or xml or some other format)
+
+* Users and their permissions will be stored in data/users file
+* All these library files will be stored in data/lib folder
+* There will be a config.php script which includes all these lib files and starts the db
+
+=> Useful functions
+* eval(), shell_exec(), unlink(), mkdir(), rmdir(), scandir(), chdir(), getcwd()
+
+=> Useful Techniques
+* Variable Variables
+* Type casting
+
+=> If using csv
+* fgetcsv() and fputcsv()
+* A seperate file in the database folder to store that data structure of tables.
