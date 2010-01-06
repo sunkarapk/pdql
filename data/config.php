@@ -7,7 +7,7 @@
  */
 
  //define(MODE,"cli" or "web"); This should be in the initial including file in app
- define(CWD,getcwd());
+ define(CWD,getcwd()."/");
 
  defined(MODE) or die('You should define a mode before starting the usage of PDQL');
 
