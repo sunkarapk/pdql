@@ -20,11 +20,11 @@ class error {
 	public function set($msg)
 	{
 		if(empty(self::$errclass) && empty(self::$errfunct))
-			die($msg);
+			die($msg.N);
 		else if(empty(self::$errclass) && !empty(self::$errfunct))
-			eval(self::$errfunct."(\$msg);");
+			eval(self::$errfunct."(\$msg.N);");
 		else
-			eval(self::$errclass."::".$errfunct."(\$msg);");
+			eval(self::$errclass."::".$errfunct."(\$msg.N);");
 	}
 
 }

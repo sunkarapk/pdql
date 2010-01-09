@@ -68,6 +68,36 @@ class db {
 		self::$db = null;
 	}
 
+	public function query($str)
+	{
+		if(preg_match('/^SELECT [\*,-a-zA-Z0-9_]+ FROM [-a-zA-Z0-9_]+( WHERE (([-a-zA-Z0-9_]+([\s><!=]+| IS NULL| LIKE | NOT LIKE | IS NOT NULL)\'[%-a-zA-Z0-9_]+\')| AND | OR |[\(\)\s]+))+)?( ORDER BY [-a-zA-Z0-9_]+ (ASC|DESC)| LIMIT [0-9]+,[0-9]+|$)+/i'))
+		{
+			$this->selectfrom();
+		}
+		else
+			self::$error->set("Not a valid mysql query. Query: ".$str);
+	}
+
+	protected function selectfrom()
+	{
+		//SELECT fieldnames FROM tablename WHERE condn
+	}
+
+	protected function update()
+	{
+		//UPDATE tablename SET fieldnames=values WHERE condn
+	}
+
+	protected function deletefrom()
+	{
+		//DELETE FROM tablename WHERE condn
+	}
+
+	protected function insertinto()
+	{
+		//INSERT INTO tablename (fieldnames) VALUES (values)
+	}
+
 }
 
 ?>
