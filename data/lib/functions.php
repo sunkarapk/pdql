@@ -31,4 +31,15 @@ function atoo($arr)
 		return false;
 }
 
+/*
+ * Get string after needle (Case insensitive)
+ */
+function straft($haystack, $needle) 
+{
+    $pos = stripos($haystack, $needle);
+    if (is_int($pos)) 
+        return substr($haystack, $pos + strlen($needle));
+    return NULL;
+}
+
 ?>
