@@ -70,9 +70,21 @@ class db {
 
 	public function query($str)
 	{
-		if(preg_match('/^SELECT [\*,-a-zA-Z0-9_]+ FROM [-a-zA-Z0-9_]+( WHERE (([-a-zA-Z0-9_]+([\s><!=]+| IS NULL| LIKE | NOT LIKE | IS NOT NULL)\'[%-a-zA-Z0-9_]+\')| AND | OR |[\(\)\s]+))+)?( ORDER BY [-a-zA-Z0-9_]+ (ASC|DESC)| LIMIT [0-9]+,[0-9]+|$)+/i'))
+		if(preg_match('/^SELECT [\*,-a-zA-Z0-9_]+ FROM [-a-zA-Z0-9_]+( WHERE (([-a-zA-Z0-9_]+([\s><!=]+| IS NULL| LIKE | NOT LIKE | IS NOT NULL)\'[%-a-zA-Z0-9_/\(\)\s:;,@\.]+\')| AND | OR |(\s)?(\(|\))?(\s)?)+)?( ORDER BY [-a-zA-Z0-9_]+ (ASC|DESC)| LIMIT [0-9]+,[0-9]+|$)+/i',$str,$match) != 0 && $str == $match)
 		{
 			$this->selectfrom();
+		}
+		else if(preg_match('/^DELETE FROM [-a-zA-Z0-9_]+( WHERE (([-a-zA-Z0-9_]+([\s><!=]+| IS NULL| LIKE | NOT LIKE | IS NOT NULL)\'[%-a-zA-Z0-9_/\(\)\s:;,@\.]+\')| AND | OR |(\s)?(\(|\))?(\s)?)+)?( ORDER BY [-a-zA-Z0-9_]+ (ASC|DESC)| LIMIT [0-9]+,[0-9]+|$)/i',$str,$match) != 0 && $str == $match)
+		{
+			$this->deletefrom();
+		}
+		else if(preg_match('/^INSERT INTO [-a-zA-Z0-9_]+ (\([,-a-ZA-Z0-9_]+\) )?VALUES \(\'[%-a-zA-Z0-9_/\(\)\s:;,@\.]+\'(,\'[%-a-zA-Z0-9_/\(\)\s:;,@\.]+\')*\)/i',$str,$match) != 0 && $str == $match)
+		{
+			$this->insertinto();
+		}
+		else if(preg_match('/^UPDATE [-a-zA-Z0-9_]+ SET [-a-zA-Z0-9_]+=(NULL|\'[%-a-zA-Z0-9_/\(\)\s:;,@\.]+\'|DEFAULT)(,[-a-zA-Z0-9_]+=(NULL|\'[%-a-zA-Z0-9_/\(\)\s:;,@\.]+\'|DEFAULT))*( WHERE (([-a-zA-Z0-9_]+([\s><!=]+| IS NULL| LIKE | NOT LIKE | IS NOT NULL)\'[%-a-zA-Z0-9_/\(\)\s:;,@\.]+\')| AND | OR |(\s)?(\(|\))?(\s)?)+)?( ORDER BY [-a-zA-Z0-9_]+ (ASC|DESC)| LIMIT [0-9]+,[0-9]+|$)/i',$str,$match) != 0 && $str == $match)
+		{
+			$this->update();
 		}
 		else
 			self::$error->set("Not a valid mysql query. Query: ".$str);
