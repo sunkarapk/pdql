@@ -42,4 +42,12 @@ function straft($haystack, $needle)
     return NULL;
 }
 
+/*
+ * Changing where condition to logic
+ */
+function changetoLogic($str)
+{
+	//even with brackets
+}
+
 ?>

@@ -83,7 +83,7 @@ class db {
 			$str = stristr($str," LIMIT ",true);
 			$order = explode(" ",straft($str," ORDER BY "));
 			$str = stristr ($str," ORDER BY ",true);
-			$this->selectfrom($table,$fields,$limit,$order);
+			$this->selectfrom($table,$fields,$limit,$order,$where);
 		}
 		else if(preg_match('/^DELETE FROM [-a-zA-Z0-9_]+( WHERE (([-a-zA-Z0-9_]+([\s><!=]+| IS NULL| LIKE | NOT LIKE | IS NOT NULL)\'[%-a-zA-Z0-9_/\(\)\s:;,@\.]+\')| AND | OR |(\s)?(\(|\))?(\s)?)+)?( ORDER BY [-a-zA-Z0-9_]+ (ASC|DESC)| LIMIT [0-9]+,[0-9]+|$)/i',$str,$match) != 0 && $str == $match)
 		{
@@ -94,14 +94,23 @@ class db {
 			$str = stristr($str," LIMIT ",true);
 			$order = explode(" ",straft($str," ORDER BY "));
 			$str = stristr ($str," ORDER BY ",true);
-			$this->deletefrom($table,$limit,$order);
+			$this->deletefrom($table,$limit,$order,$where);
 		}
 		else if(preg_match('/^INSERT INTO [-a-zA-Z0-9_]+ (\([,-a-ZA-Z0-9_]+\) )?VALUES \(\'[%-a-zA-Z0-9_/\(\)\s:;,@\.]+\'(,\'[%-a-zA-Z0-9_/\(\)\s:;,@\.]+\')*\)/i',$str,$match) != 0 && $str == $match)
 		{
+			$fields = null;
 			$str = substr($str,12);
 			$table = stristr($str," ",true);
 			$str = straft($str," ");
-			$this->insertinto($table);
+			$buf = explode("VALUES ",$str);
+			if(!empty($buf[0]))
+			{
+				$str = substr($buf[0],1);
+				$str = stristr($str,") ",true);
+				$fields = explode(",",$str);
+			}
+			$values = explode(",",$buf[1]);
+			$this->insertinto($table,$fields,$values);
 		}
 		else if(preg_match('/^UPDATE [-a-zA-Z0-9_]+ SET [-a-zA-Z0-9_]+=(NULL|\'[%-a-zA-Z0-9_/\(\)\s:;,@\.]+\'|DEFAULT)(,[-a-zA-Z0-9_]+=(NULL|\'[%-a-zA-Z0-9_/\(\)\s:;,@\.]+\'|DEFAULT))*( WHERE (([-a-zA-Z0-9_]+([\s><!=]+| IS NULL| LIKE | NOT LIKE | IS NOT NULL)\'[%-a-zA-Z0-9_/\(\)\s:;,@\.]+\')| AND | OR |(\s)?(\(|\))?(\s)?)+)?( ORDER BY [-a-zA-Z0-9_]+ (ASC|DESC)| LIMIT [0-9]+,[0-9]+|$)/i',$str,$match) != 0 && $str == $match)
 		{
@@ -112,30 +121,30 @@ class db {
 			$str = stristr($str," LIMIT ",true);
 			$order = explode(" ",straft($str," ORDER BY "));
 			$str = stristr ($str," ORDER BY ",true);
-			$this->update($table,$limit,$order);
+			$this->update($table,$limit,$order,$where);
 		}
 		else
 			self::$error->set("Not a valid mysql query. Query: ".$str);
 	}
 
-	protected function selectfrom()
+	protected function selectfrom($table,$fields,$limit,$order,$where)
 	{
-		//SELECT fieldnames FROM tablename WHERE condn
+		$cond = changetoLogic($where);
 	}
 
-	protected function update()
+	protected function update($table,$limit,$order,$where)
 	{
-		//UPDATE tablename SET fieldnames=values WHERE condn
+		$cond = changetoLogic($where);
 	}
 
-	protected function deletefrom()
+	protected function deletefrom($table,$limit,$order,$where)
 	{
-		//DELETE FROM tablename WHERE condn
+		$cond = changetoLogic($where);
 	}
 
-	protected function insertinto()
+	protected function insertinto($table,$fields,$values)
 	{
-		//INSERT INTO tablename (fieldnames) VALUES (values)
+		
 	}
 
 }
