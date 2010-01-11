@@ -83,7 +83,7 @@ class db {
 			$str = stristr($str," LIMIT ",true);
 			$order = explode(" ",straft($str," ORDER BY "));
 			$str = stristr ($str," ORDER BY ",true);
-			$this->selectfrom($table,$fields,$limit,$order,$where);
+			$this->selectfrom($table,$fields,$limit,$order,$str);
 		}
 		else if(preg_match('/^DELETE FROM [-a-zA-Z0-9_]+( WHERE (([-a-zA-Z0-9_]+([\s><!=]+| IS NULL| LIKE | NOT LIKE | IS NOT NULL)\'[%-a-zA-Z0-9_/\(\)\s:;,@\.]+\')| AND | OR |(\s)?(\(|\))?(\s)?)+)?( ORDER BY [-a-zA-Z0-9_]+ (ASC|DESC)| LIMIT [0-9]+,[0-9]+|$)/i',$str,$match) != 0 && $str == $match)
 		{
@@ -94,7 +94,7 @@ class db {
 			$str = stristr($str," LIMIT ",true);
 			$order = explode(" ",straft($str," ORDER BY "));
 			$str = stristr ($str," ORDER BY ",true);
-			$this->deletefrom($table,$limit,$order,$where);
+			$this->deletefrom($table,$limit,$order,$str);
 		}
 		else if(preg_match('/^INSERT INTO [-a-zA-Z0-9_]+ (\([,-a-ZA-Z0-9_]+\) )?VALUES \(\'[%-a-zA-Z0-9_/\(\)\s:;,@\.]+\'(,\'[%-a-zA-Z0-9_/\(\)\s:;,@\.]+\')*\)/i',$str,$match) != 0 && $str == $match)
 		{
@@ -121,7 +121,7 @@ class db {
 			$str = stristr($str," LIMIT ",true);
 			$order = explode(" ",straft($str," ORDER BY "));
 			$str = stristr ($str," ORDER BY ",true);
-			$this->update($table,$limit,$order,$where);
+			$this->update($table,$limit,$order,$str);
 		}
 		else
 			self::$error->set("Not a valid mysql query. Query: ".$str);
