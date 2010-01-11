@@ -79,28 +79,40 @@ class db {
 			$str = straft($str," FROM ");
 			$table = stristr($str," ",true);
 			$str = straft($str," ");
-			$this->selectfrom($table,$fields);
+			$limit = explode(",",straft($str," LIMIT "));
+			$str = stristr($str," LIMIT ",true);
+			$order = explode(" ",straft($str," ORDER BY "));
+			$str = stristr ($str," ORDER BY ",true);
+			$this->selectfrom($table,$fields,$limit,$order);
 		}
 		else if(preg_match('/^DELETE FROM [-a-zA-Z0-9_]+( WHERE (([-a-zA-Z0-9_]+([\s><!=]+| IS NULL| LIKE | NOT LIKE | IS NOT NULL)\'[%-a-zA-Z0-9_/\(\)\s:;,@\.]+\')| AND | OR |(\s)?(\(|\))?(\s)?)+)?( ORDER BY [-a-zA-Z0-9_]+ (ASC|DESC)| LIMIT [0-9]+,[0-9]+|$)/i',$str,$match) != 0 && $str == $match)
 		{
 			$str = substr($str,12);
-                        $table = stristr($str," ",true);
+			$table = stristr($str," ",true);
 			$str = straft($str," ");
-			$this->deletefrom($table);
+			$limit = explode(",",straft($str," LIMIT "));
+			$str = stristr($str," LIMIT ",true);
+			$order = explode(" ",straft($str," ORDER BY "));
+			$str = stristr ($str," ORDER BY ",true);
+			$this->deletefrom($table,$limit,$order);
 		}
 		else if(preg_match('/^INSERT INTO [-a-zA-Z0-9_]+ (\([,-a-ZA-Z0-9_]+\) )?VALUES \(\'[%-a-zA-Z0-9_/\(\)\s:;,@\.]+\'(,\'[%-a-zA-Z0-9_/\(\)\s:;,@\.]+\')*\)/i',$str,$match) != 0 && $str == $match)
 		{
-                        $str = substr($str,12);
-                        $table = stristr($str," ",true);
-                        $str = straft($str," ");
+			$str = substr($str,12);
+			$table = stristr($str," ",true);
+			$str = straft($str," ");
 			$this->insertinto($table);
 		}
 		else if(preg_match('/^UPDATE [-a-zA-Z0-9_]+ SET [-a-zA-Z0-9_]+=(NULL|\'[%-a-zA-Z0-9_/\(\)\s:;,@\.]+\'|DEFAULT)(,[-a-zA-Z0-9_]+=(NULL|\'[%-a-zA-Z0-9_/\(\)\s:;,@\.]+\'|DEFAULT))*( WHERE (([-a-zA-Z0-9_]+([\s><!=]+| IS NULL| LIKE | NOT LIKE | IS NOT NULL)\'[%-a-zA-Z0-9_/\(\)\s:;,@\.]+\')| AND | OR |(\s)?(\(|\))?(\s)?)+)?( ORDER BY [-a-zA-Z0-9_]+ (ASC|DESC)| LIMIT [0-9]+,[0-9]+|$)/i',$str,$match) != 0 && $str == $match)
 		{
-                        $str = substr($str,7);
-                        $table = stristr($str," ",true);
-                        $str = straft($str," ");
-			$this->update();
+			$str = substr($str,7);
+			$table = stristr($str," ",true);
+			$str = straft($str," ");
+			$limit = explode(",",straft($str," LIMIT "));
+			$str = stristr($str," LIMIT ",true);
+			$order = explode(" ",straft($str," ORDER BY "));
+			$str = stristr ($str," ORDER BY ",true);
+			$this->update($table,$limit,$order);
 		}
 		else
 			self::$error->set("Not a valid mysql query. Query: ".$str);
