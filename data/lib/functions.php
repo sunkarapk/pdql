@@ -47,7 +47,47 @@ function straft($haystack, $needle)
  */
 function changetoLogic($str)
 {
-	//even with brackets
+	$newStr = array();
+	$allow = array('(',' ',')','=','!','>','<','\'');
+	
+	for($i=0; $i < strlen($str); $i++)
+	{
+		$c = $str[$i];
+		if(in_array($c,$allow))
+			array_push($newStr,$c);
+		else
+		{
+			$start = $i;
+			while($i<strlen($str))
+			{
+				array_push($newStr,$c);
+				$i++;
+				$c = $str[$i];
+				if(in_array($c,$allow))
+				{
+					$buf = '';
+					for($j=$i-1;$j>=$start;$j--)
+						$buf = array_pop($newStr).$buf;
+					$buf = "\$row['".$buf."']";
+					array_push($newStr,$buf);
+					array_push($newStr,$c);
+					break;
+				}
+			}
+		}
+	}
+	
+	$str = "";
+	for($i=0;!empty($newStr[$i]);$i++)
+		$str.= $newStr[$i];
+	
+	$newStr = explode(' = ',$str);
+	
+	$str = $newStr[0];
+	for($i=1;!empty($newStr[$i]);$i++)
+		$str.= " == ".$newStr[$i];
+	
+	return $str;
 }
 
 ?>

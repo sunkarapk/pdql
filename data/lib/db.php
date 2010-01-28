@@ -47,7 +47,7 @@ class db {
 
 	protected function createdb($dbname)
 	{
-		if(!is_dir(CWD.$dbname)
+		if(!is_dir(CWD.$dbname))
 			mkdir(CWD.$dbname);
 	}
 

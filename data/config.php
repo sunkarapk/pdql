@@ -9,7 +9,8 @@
  //define(MODE,"cli" or "web"); This should be in the initial including file in app
  define(CWD,getcwd()."/");
 
- defined(MODE) or die('You should define a mode before starting the usage of PDQL');
+ if(!defined('MODE'))
+ 	die('You should define a mode before starting the usage of PDQL');
 
  if(MODE == "cli")
 	define(N,"\n");
@@ -17,6 +18,12 @@
 	define(N,"<br>");
 
  if(substr(sprintf('%o', fileperms(CWD)), -4) != "0757")
-	die("File permissions not set correctly. Check the INSTALL file");
+	die("File permissions not set correctly. Check the INSTALL file".N);
+
+ if ( !defined('MEMORY_LIMIT') )
+	define('MEMORY_LIMIT', '64M');
+
+ if ( function_exists('memory_get_usage') && ( (int) @ini_get('memory_limit') < abs(intval(MEMORY_LIMIT)) ) )
+	@ini_set('memory_limit', MEMORY_LIMIT);
 
 ?>
