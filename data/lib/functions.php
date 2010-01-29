@@ -49,17 +49,28 @@ function changetoLogic($str)
 {
 	$newStr = array();
 	$allow = array('(',' ',')','=','!','>','<','\'');
+	$special = array('AND','OR','IS NULL','IS NOT NULL','LIKE','NOT LIKE');
+	$specialTo = array('&&','||','== NULL','!= NULL','==','!=');
+	$nonBreak = array('IS','NOT','IS NOT');
+	$incBreak = array(1,2,4);
 	
 	for($i=0; $i < strlen($str); $i++)
 	{
+		$flag = 0;
 		$c = $str[$i];
 		if(in_array($c,$allow))
 			array_push($newStr,$c);
 		else
 		{
+			$sign = array_pop($newStr);
+			if($sign == '\'')
+				$flag = 1;
+			array_push($newStr,$sign);
+			
 			$start = $i;
 			while($i<strlen($str))
 			{
+				$break = 0;
 				array_push($newStr,$c);
 				$i++;
 				$c = $str[$i];
@@ -68,10 +79,31 @@ function changetoLogic($str)
 					$buf = '';
 					for($j=$i-1;$j>=$start;$j--)
 						$buf = array_pop($newStr).$buf;
-					$buf = "\$row['".$buf."']";
+					print $buf.N;
+					for($j=0;!empty($special[$j]);$j++)
+						if($buf == $special[$j])
+						{
+							$flag = 1;
+							$buf = $specialTo[$j];
+						}
+					
+					for($j=0;!empty($nonBreak[$j]);$j++)
+						if($buf == $nonBreak[$j])
+						{
+							$break = $flag = 1;
+							$start = $start + $incBreak[$j];
+						}
+					
+					if($flag == 0)
+						$buf = "\\\$row['".$buf."']";
+						
 					array_push($newStr,$buf);
 					array_push($newStr,$c);
-					break;
+					
+					if($break == 0)
+						break;
+					else
+						$c = array_pop($newStr);
 				}
 			}
 		}
