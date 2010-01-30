@@ -79,7 +79,7 @@ function changetoLogic($str)
 					$buf = '';
 					for($j=$i-1;$j>=$start;$j--)
 						$buf = array_pop($newStr).$buf;
-					print $buf.N;
+
 					for($j=0;!empty($special[$j]);$j++)
 						if($buf == $special[$j])
 						{

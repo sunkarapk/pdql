@@ -16,14 +16,14 @@ class db {
 	{
 		self::$error = new error($error[0],$error[1]);
 
-                $fp = fopen(CWD."users","r");
-                while(fscanf($fp,"%s\n",$hash))
-                {
-                	if($hash == md5($dbuser.$dbpass))
-                        {
-                        	self::$access = 1;
-                                break;
-                        }
+		$fp = fopen(CWD."users","r");
+		while(fscanf($fp,"%s\n",$hash))
+		{
+			if($hash == md5($dbuser.$dbpass))
+			{
+				self::$access = 1;
+				break;
+			}
 
 			if(self::$access == 0)
 				$this->nouser($dbuser);
@@ -68,8 +68,18 @@ class db {
 		self::$db = null;
 	}
 
+	protected function checkTableName($table);
+	{
+		$check = array('mysql','from','limit','select','delete','insert','update','where','values');
+		if(in_array(strtolower($table),$check))
+			self::$error->set($table." can't be used as a table name.");
+	}
+
 	public function query($str)
 	{
+		if(self::$db == NULL)
+			self::$error->set("No database connection found");
+	
 		if(preg_match('/^SELECT [\*,-a-zA-Z0-9_]+ FROM [-a-zA-Z0-9_]+( WHERE (([-a-zA-Z0-9_]+([\s><!=]+| IS NULL| LIKE | NOT LIKE | IS NOT NULL)\'[%-a-zA-Z0-9_/\(\)\s:;,@\.]+\')| AND | OR |(\s)?(\(|\))?(\s)?)+)?( ORDER BY [-a-zA-Z0-9_]+ (ASC|DESC)| LIMIT [0-9]+,[0-9]+|$)+/i',$str,$match) != 0 && $str == $match)
 		{
 			$str = substr($str,7);
@@ -78,6 +88,7 @@ class db {
 				$fields = explode(",",stristr($str," FROM ",true));
 			$str = straft($str," FROM ");
 			$table = stristr($str," ",true);
+			$this->checkTableName($table);
 			$str = straft($str," ");
 			$limit = explode(",",straft($str," LIMIT "));
 			$str = stristr($str," LIMIT ",true);
@@ -89,6 +100,7 @@ class db {
 		{
 			$str = substr($str,12);
 			$table = stristr($str," ",true);
+			$this->checkTableName($table);
 			$str = straft($str," ");
 			$limit = explode(",",straft($str," LIMIT "));
 			$str = stristr($str," LIMIT ",true);
@@ -101,6 +113,7 @@ class db {
 			$fields = null;
 			$str = substr($str,12);
 			$table = stristr($str," ",true);
+			$this->checkTableName($table);
 			$str = straft($str," ");
 			$buf = explode("VALUES ",$str);
 			if(!empty($buf[0]))
@@ -116,6 +129,7 @@ class db {
 		{
 			$str = substr($str,7);
 			$table = stristr($str," ",true);
+			$this->checkTableName($table);
 			$str = straft($str," ");
 			$limit = explode(",",straft($str," LIMIT "));
 			$str = stristr($str," LIMIT ",true);
