@@ -68,7 +68,7 @@ class db {
 		self::$db = null;
 	}
 
-	protected function checkTableName($table);
+	protected function checkTableName($table)
 	{
 		$check = array('mysql','from','limit','select','delete','insert','update','where','values');
 		if(in_array(strtolower($table),$check))
