@@ -53,13 +53,13 @@ class db {
 
 	protected function nodb($dbname)
 	{
-		self::$error->set("Database \'".$dbname."\' is not available");
+		self::$error->set("Database '".$dbname."' is not available");
 		$this->closeconnection();
 	}
 	
 	protected function nouser($dbuser)
 	{
-		self::$error->set("User named \'".$dbuser."\' is not found/Wrong password");
+		self::$error->set("User named '".$dbuser."' is not found/Wrong password");
 		$this->closeconnection();
 	}
 
@@ -80,7 +80,7 @@ class db {
 		if(self::$db == NULL)
 			self::$error->set("No database connection found");
 	
-		if(preg_match('/^SELECT [\*,-a-zA-Z0-9_]+ FROM [-a-zA-Z0-9_]+( WHERE (([-a-zA-Z0-9_]+([\s><!=]+| IS NULL| LIKE | NOT LIKE | IS NOT NULL)\'[%-a-zA-Z0-9_/\(\)\s:;,@\.]+\')| AND | OR |(\s)?(\(|\))?(\s)?)+)?( ORDER BY [-a-zA-Z0-9_]+ (ASC|DESC)| LIMIT [0-9]+,[0-9]+|$)+/i',$str,$match) != 0 && $str == $match)
+		if(preg_match("/^SELECT [\*,-a-zA-Z0-9_]+ FROM [-a-zA-Z0-9_]+( WHERE (([-a-zA-Z0-9_]+([\s><!=]+| IS NULL| LIKE | NOT LIKE | IS NOT NULL)'[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+')| AND | OR )?( ORDER BY [-a-zA-Z0-9_]+ (ASC|DESC))| LIMIT [0-9]+,[0-9]+|$)+/i",$str,$match) != 0 && $str == $match[0])
 		{
 			$str = substr($str,7);
 			$fields = NULL;
@@ -96,7 +96,7 @@ class db {
 			$str = stristr ($str," ORDER BY ",true);
 			$this->selectfrom($table,$fields,$limit,$order,$str);
 		}
-		else if(preg_match('/^DELETE FROM [-a-zA-Z0-9_]+( WHERE (([-a-zA-Z0-9_]+([\s><!=]+| IS NULL| LIKE | NOT LIKE | IS NOT NULL)\'[%-a-zA-Z0-9_/\(\)\s:;,@\.]+\')| AND | OR |(\s)?(\(|\))?(\s)?)+)?( ORDER BY [-a-zA-Z0-9_]+ (ASC|DESC)| LIMIT [0-9]+,[0-9]+|$)/i',$str,$match) != 0 && $str == $match)
+		else if(preg_match("/^DELETE FROM [-a-zA-Z0-9_]+( WHERE (([-a-zA-Z0-9_]+([\s><!=]+| IS NULL| LIKE | NOT LIKE | IS NOT NULL)'[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+')| AND | OR |(\s)?(\(|\))?(\s)?)+)?( ORDER BY [-a-zA-Z0-9_]+ (ASC|DESC)| LIMIT [0-9]+,[0-9]+|$)/i",$str,$match) != 0 && $str == $match[0])
 		{
 			$str = substr($str,12);
 			$table = stristr($str," ",true);
@@ -108,7 +108,7 @@ class db {
 			$str = stristr ($str," ORDER BY ",true);
 			$this->deletefrom($table,$limit,$order,$str);
 		}
-		else if(preg_match('/^INSERT INTO [-a-zA-Z0-9_]+ (\([,-a-ZA-Z0-9_]+\) )?VALUES \(\'[%-a-zA-Z0-9_/\(\)\s:;,@\.]+\'(,\'[%-a-zA-Z0-9_/\(\)\s:;,@\.]+\')*\)/i',$str,$match) != 0 && $str == $match)
+		else if(preg_match("/^INSERT INTO [-a-zA-Z0-9_]+ (\([,-a-ZA-Z0-9_]+\) )?VALUES \(\'[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+'(,'[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+')*\)/i",$str,$match) != 0 && $str == $match[0])
 		{
 			$fields = null;
 			$str = substr($str,12);
@@ -125,7 +125,7 @@ class db {
 			$values = explode(",",$buf[1]);
 			$this->insertinto($table,$fields,$values);
 		}
-		else if(preg_match('/^UPDATE [-a-zA-Z0-9_]+ SET [-a-zA-Z0-9_]+=(NULL|\'[%-a-zA-Z0-9_/\(\)\s:;,@\.]+\'|DEFAULT)(,[-a-zA-Z0-9_]+=(NULL|\'[%-a-zA-Z0-9_/\(\)\s:;,@\.]+\'|DEFAULT))*( WHERE (([-a-zA-Z0-9_]+([\s><!=]+| IS NULL| LIKE | NOT LIKE | IS NOT NULL)\'[%-a-zA-Z0-9_/\(\)\s:;,@\.]+\')| AND | OR |(\s)?(\(|\))?(\s)?)+)?( ORDER BY [-a-zA-Z0-9_]+ (ASC|DESC)| LIMIT [0-9]+,[0-9]+|$)/i',$str,$match) != 0 && $str == $match)
+		else if(preg_match("/^UPDATE [-a-zA-Z0-9_]+ SET [-a-zA-Z0-9_]+=(NULL|\'[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+\'|DEFAULT)(,[-a-zA-Z0-9_]+=(NULL|'[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+'|DEFAULT))*( WHERE (([-a-zA-Z0-9_]+([\s><!=]+| IS NULL| LIKE | NOT LIKE | IS NOT NULL)'[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+')| AND | OR |(\s)?(\(|\))?(\s)?)+)?( ORDER BY [-a-zA-Z0-9_]+ (ASC|DESC)| LIMIT [0-9]+,[0-9]+|$)/i",$str,$match) != 0 && $str == $match[0])
 		{
 			$str = substr($str,7);
 			$table = stristr($str," ",true);
@@ -154,6 +154,7 @@ class db {
 	protected function deletefrom($table,$limit,$order,$where)
 	{
 		$cond = changetoLogic($where);
+print $table.N.$cond.N;
 	}
 
 	protected function insertinto($table,$fields,$values)
