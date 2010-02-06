@@ -85,28 +85,28 @@ class db {
 			$str = substr($str,7);
 			$fields = NULL;
 			if(substr($str,0,2) != '* ')
-				$fields = explode(",",strbef($str," FROM ",true));
+				$fields = explode(",",strbef($str," FROM "));
 			$str = straft($str," FROM ");
-			$table = strbef($str," ",true);
+			$table = strbef($str," ");
 			$this->checkTableName($table);
 			$str = straft($str," ");
 			$limit = explode(",",straft($str," LIMIT "));
-			$str = strbef($str," LIMIT ",true);
+			$str = strbef($str," LIMIT ");
 			$order = explode(" ",straft($str," ORDER BY "));
-			$str = strbef($str," ORDER BY ",true);
+			$str = strbef($str," ORDER BY ");
 			$str = straft($str,"WHERE ");
 			$this->selectfrom($table,$fields,$limit,$order,$str);
 		}
-		else if(preg_match("/^DELETE FROM [-a-zA-Z0-9_]+( WHERE (([-a-zA-Z0-9_]+([\s><!=]+| IS NULL| LIKE | NOT LIKE | IS NOT NULL)'[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+')| AND | OR |(\s)?(\(|\))?(\s)?)+)?( ORDER BY [-a-zA-Z0-9_]+ (ASC|DESC)| LIMIT [0-9]+,[0-9]+|$)/i",$str,$match) != 0 && $str == $match[0])
+		else if(preg_match("/^DELETE FROM [-a-zA-Z0-9_]+( WHERE ([-a-zA-Z0-9_]+([\s><!=]+'[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+'| IS NULL|IS NOT NULL| LIKE '[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+'| NOT LIKE '[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+')| AND | OR |(\s)?(\(|\))?(\s)?)+)?( ORDER BY [-a-zA-Z0-9_]+ (ASC|DESC)| LIMIT [0-9]+,[0-9]+|$)+/i",$str,$match) != 0 && $str == $match[0])
 		{
 			$str = substr($str,12);
-			$table = strbef($str," ",true);
+			$table = strbef($str," ");
 			$this->checkTableName($table);
 			$str = straft($str," ");
 			$limit = explode(",",straft($str," LIMIT "));
-			$str = strbef($str," LIMIT ",true);
+			$str = strbef($str," LIMIT ");
 			$order = explode(" ",straft($str," ORDER BY "));
-			$str = strbef($str," ORDER BY ",true);
+			$str = strbef($str," ORDER BY ");
 			$str = straft($str,"WHERE ");
 			$this->deletefrom($table,$limit,$order,$str);
 		}
@@ -114,29 +114,30 @@ class db {
 		{
 			$fields = null;
 			$str = substr($str,12);
-			$table = strbef($str," ",true);
+			$table = strbef($str," ");
 			$this->checkTableName($table);
 			$str = straft($str," ");
-			$buf = explode("VALUES ",$str);
-			if(!empty($buf[0]))
+			$buf = strbef($str,"VALUES ");
+			$str = straft($str,"VALUES (");
+			if(!empty($buf))
 			{
-				$str = substr($buf[0],1);
-				$str = strbef($str,") ",true);
-				$fields = explode(",",$str);
+				$buf = substr($buf,1);
+				$buf = strbef($buf,") ");
+				$fields = explode(",",$buf);
 			}
-			$values = explode(",",$buf[1]);
+			$values = explode(",",strbef($str,")"));
 			$this->insertinto($table,$fields,$values);
 		}
-		else if(preg_match("/^UPDATE [-a-zA-Z0-9_]+ SET [-a-zA-Z0-9_]+=(NULL|\'[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+\'|DEFAULT)(,[-a-zA-Z0-9_]+=(NULL|'[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+'|DEFAULT))*( WHERE (([-a-zA-Z0-9_]+([\s><!=]+| IS NULL| LIKE | NOT LIKE | IS NOT NULL)'[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+')| AND | OR |(\s)?(\(|\))?(\s)?)+)?( ORDER BY [-a-zA-Z0-9_]+ (ASC|DESC)| LIMIT [0-9]+,[0-9]+|$)/i",$str,$match) != 0 && $str == $match[0])
+		else if(preg_match("/^UPDATE [-a-zA-Z0-9_]+ SET [-a-zA-Z0-9_]+=(NULL|'[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+'|DEFAULT)(,[-a-zA-Z0-9_]+=(NULL|'[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+'|DEFAULT))*( WHERE ([-a-zA-Z0-9_]+([\s><!=]+'[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+'| IS NULL|IS NOT NULL| LIKE '[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+'| NOT LIKE '[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+')| AND | OR |(\s)?(\(|\))?(\s)?)+)?( ORDER BY [-a-zA-Z0-9_]+ (ASC|DESC)| LIMIT [0-9]+,[0-9]+|$)+/i",$str,$match) != 0 && $str == $match[0])
 		{
 			$str = substr($str,7);
-			$table = strbef($str," ",true);
+			$table = strbef($str," ");
 			$this->checkTableName($table);
 			$str = straft($str," ");
 			$limit = explode(",",straft($str," LIMIT "));
-			$str = strbef($str," LIMIT ",true);
+			$str = strbef($str," LIMIT ");
 			$order = explode(" ",straft($str," ORDER BY "));
-			$str = strbef($str," ORDER BY ",true);
+			$str = strbef($str," ORDER BY ");
 			$str = straft($str,"WHERE ");
 			$this->update($table,$limit,$order,$str);
 		}

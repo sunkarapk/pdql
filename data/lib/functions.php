@@ -92,14 +92,14 @@ function changetoLogic($str)
 						$buf = array_pop($newStr).$buf;
 
 					for($j=0;!empty($special[$j]);$j++)
-						if($buf == $special[$j])
+						if(strtoupper($buf) == $special[$j])
 						{
 							$flag = 1;
 							$buf = $specialTo[$j];
 						}
 					
 					for($j=0;!empty($nonBreak[$j]);$j++)
-						if($buf == $nonBreak[$j])
+						if(strtoupper($buf) == $nonBreak[$j])
 						{
 							$break = $flag = 1;
 							$start = $start + $incBreak[$j];
