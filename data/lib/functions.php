@@ -43,6 +43,17 @@ function straft($haystack, $needle)
 }
 
 /*
+ * The php stristr function replacement
+ */
+function strbef($haystack, $needle)
+{
+	$pos = stripos($haystack, $needle);
+	if(is_int($pos))
+		return substr($haystack, 0, $pos);
+	return NULL;
+}
+
+/*
  * Changing where condition to logic
  */
 function changetoLogic($str)
