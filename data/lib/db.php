@@ -11,10 +11,13 @@ class db {
 	public static $access = 0;
 	public static $error = null;
 	public static $db = null;
+	
+	protected $json;
 
 	public function __construct($dbname,$dbuser,$dbpass,$error=array())
 	{
 		self::$error = new error($error[0],$error[1]);
+		$this->json = new Services_JSON();
 
 		$fp = fopen(CWD."users","r");
 		while(fscanf($fp,"%s\n",$hash))
@@ -162,7 +165,21 @@ class db {
 
 	protected function insertinto($table,$fields,$values)
 	{
+		$fp = fopen(self::$db."mysql","r");
+		while(fscanf($fp,"%s\n",$hash))
+		{
+			$tbstr = $this->json->decode($hash);
+			if($tbstr['name'] == $table);
+			{
+				$tbf = self::$db.$table;
+				break;
+			}
+		}
 		
+		if(!empty($tbf))
+		{
+			$tbfp = fopen($tbf,"a");
+		}
 	}
 
 }

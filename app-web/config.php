@@ -10,4 +10,10 @@ define('MODE','web');
 
 include_once 'data/config.php';
 
+define('DBNAME','exdb-web');
+define('DBUSER','pavan');
+define('DBPASS','pkumar');
+
+$db = new db(DBNAME,DBUSER,DBPASS);
+
 ?>
