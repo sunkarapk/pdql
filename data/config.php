@@ -26,9 +26,6 @@
  if ( function_exists('memory_get_usage') && ( (int) @ini_get('memory_limit') < abs(intval(MEMORY_LIMIT)) ) )
 	@ini_set('memory_limit', MEMORY_LIMIT);
 
- include_once 'lib/db.php';
- include_once 'lib/error.php';
- include_once 'lib/functions.php';
- include_once 'lib/json.php';
+ include_once 'lib/include.php';
 
 ?>
