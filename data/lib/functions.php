@@ -32,6 +32,19 @@ function atoo($arr)
 }
 
 /*
+ * Searches for needle in haystack's(object) key
+ */
+function array_child_search($needle,$haystack,$key)
+{
+	for($i=0;!empty($haystack[$i]);$i++)
+	{
+		if($needle == $haystack[$i]->$key)
+			break;
+	}
+	return $haystack[$i];
+}
+
+/*
  * Get string after needle (Case insensitive)
  */
 function straft($haystack, $needle) 

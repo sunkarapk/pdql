@@ -1,1 +1,1 @@
-{"name":"users","fields":[{"name":"username","type":"string","null":1,"default":1,"ai":0},{"name":"password","type":"string","null":1,"default":1,"ai":0},{"name":"cash","type":"integer","null":0,"default":100,"ai":0}]}
+{"name":"users","fields":[{"name":"username","type":"string","defaults":""},{"name":"password","type":"string","defaults":""},{"name":"cash","type":"integer","defaults":100}]}
