@@ -63,7 +63,17 @@ function strbef($haystack, $needle)
 	$pos = stripos($haystack, $needle);
 	if(is_int($pos))
 		return substr($haystack, 0, $pos);
-	return NULL;
+	return $haystack;
+}
+
+/*
+ * Strippng single quotes out of strings
+ */
+function stripquotes($str)
+{
+	$str = straft($str,"'");
+	$str = strbef($str,"'");
+	return $str;
 }
 
 /*
@@ -71,7 +81,7 @@ function strbef($haystack, $needle)
  */
 function changetoLogic($str)
 {
-	$newStr = array();
+	$newStr = array('buffer string');
 	$allow = array('(',' ',')','=','!','>','<','\'');
 	$special = array('AND','OR','IS NULL','IS NOT NULL','LIKE','NOT LIKE');
 	$specialTo = array('&&','||','== NULL','!= NULL','==','!=');
@@ -132,13 +142,13 @@ function changetoLogic($str)
 			}
 		}
 	}
-	
+
 	$str = "";
-	for($i=0;!empty($newStr[$i]);$i++)
+	for($i=1;!empty($newStr[$i]);$i++)
 		$str.= $newStr[$i];
-	
+
 	$newStr = explode(' = ',$str);
-	
+
 	$str = $newStr[0];
 	for($i=1;!empty($newStr[$i]);$i++)
 		$str.= " == ".$newStr[$i];
