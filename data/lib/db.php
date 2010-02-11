@@ -150,7 +150,53 @@ class db {
 
 	protected function selectfrom($table,$fields,$limit,$order,$where)
 	{
+		$flag = false;
+		$row = null;
 		$cond = changetoLogic($where);
+		
+		$fp = fopen(self::$db."mysql","r");
+		while(fscanf($fp,"%s\n",$hash))
+		{
+			$tbarr = $this->json->decode($hash);
+			if($tbarr->name == $table);
+			{
+				$tbf = self::$db.$table;
+				break;
+			}
+		}
+		
+		if(!empty($tbf))
+		{
+			$tbfp = fopen($tbf,"a+");
+			$tbfl = $tbarr->fields;
+			$tbvl = array();
+
+			while(fscanf($tbfp,"%s",$hash))
+			{
+				if(!empty($hash))
+				{
+					$row = $this->json->decode($hash);
+					$row = make_assoc_array($tbfl,$row);
+
+					if(!empty($cond))
+						eval("\$flag = (".$cond.");");
+					else
+						$flag = true;
+						
+					if($flag)
+						array_push($tbvl,$row);
+				}
+				$flag = false;
+				$hash = null;
+			}
+			
+			if(strtolower($order[1] == "asc"))
+				asort($tbvl);
+			else
+				arsort($tbvl);
+			
+			
+		}
 	}
 
 	protected function update($table,$limit,$order,$where)
@@ -160,7 +206,46 @@ class db {
 
 	protected function deletefrom($table,$limit,$order,$where)
 	{
+		$flag = true;
+		$row = null;
 		$cond = changetoLogic($where);
+		
+		$fp = fopen(self::$db."mysql","r");
+		while(fscanf($fp,"%s\n",$hash))
+		{
+			$tbarr = $this->json->decode($hash);
+			if($tbarr->name == $table);
+			{
+				$tbf = self::$db.$table;
+				break;
+			}
+		}
+		
+		if(!empty($tbf))
+		{
+			$tbfp = fopen($tbf,"a+");
+			$tbfl = $tbarr->fields;
+			$tbvl = array();
+
+			while(fscanf($tbfp,"%s",$hash))
+			{
+				if(!empty($hash))
+				{
+					$row = $this->json->decode($hash);
+					$row = make_assoc_array($tbfl,$row);
+
+					if(!empty($cond))
+						eval("\$flag = (".$cond.");");
+					else
+						$flag = true;
+						
+					if(!$flag)
+						array_push($tbvl,$row);
+				}
+				$flag = true;
+				$hash = null;
+			}			
+		}
 	}
 
 	protected function insertinto($table,$fields,$values)

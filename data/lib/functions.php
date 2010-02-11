@@ -45,6 +45,20 @@ function array_child_search($needle,$haystack,$key)
 }
 
 /*
+ * Make associative array from $fields object
+ */
+function make_assoc_array($fields,$array)
+{
+	for($i=0;!empty($fields[$i]);$i++)
+	{
+		if($fields[$i]->type == 'integer')
+			$array[$i] = (int) $array[$i];
+		$array[$fields[$i]->name] = $array[$i];
+	}
+	return $array;
+}
+
+/*
  * Get string after needle (Case insensitive)
  */
 function straft($haystack, $needle) 
@@ -81,7 +95,7 @@ function stripquotes($str)
  */
 function changetoLogic($str)
 {
-	$newStr = array('buffer string');
+	$newStr = array('\$flag = ');
 	$allow = array('(',' ',')','=','!','>','<','\'');
 	$special = array('AND','OR','IS NULL','IS NOT NULL','LIKE','NOT LIKE');
 	$specialTo = array('&&','||','== NULL','!= NULL','==','!=');
@@ -129,7 +143,7 @@ function changetoLogic($str)
 						}
 					
 					if($flag == 0)
-						$buf = "\\\$row['".$buf."']";
+						$buf = "\$row[".$buf."]";
 						
 					array_push($newStr,$buf);
 					array_push($newStr,$c);
