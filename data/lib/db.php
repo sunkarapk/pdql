@@ -131,7 +131,7 @@ class db {
 			$values = explode(",",strbef($str,")"));
 			$this->insertinto($table,$fields,$values);
 		}
-		else if(preg_match("/^UPDATE [-a-zA-Z0-9_]+ SET [-a-zA-Z0-9_]+=(NULL|'[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+'|DEFAULT)(,[-a-zA-Z0-9_]+=(NULL|'[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+'|DEFAULT))*( WHERE ([-a-zA-Z0-9_]+(( = | != | <= | >= | < | > )'[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+'| IS NULL|IS NOT NULL| LIKE '[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+'| NOT LIKE '[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+')| AND | OR |(\s)?(\(|\))?(\s)?)+)?( ORDER BY [-a-zA-Z0-9_]+ (ASC|DESC)| LIMIT [0-9]+,[0-9]+|$)+/i",$str,$match) != 0 && $str == $match[0])
+		else if(preg_match("/^UPDATE [-a-zA-Z0-9_]+ SET [-a-zA-Z0-9_]+ = ('NULL'|'[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+'|'DEFAULT')(,[-a-zA-Z0-9_]+ = ('NULL'|'[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+'|'DEFAULT'))*( WHERE ([-a-zA-Z0-9_]+(( = | != | <= | >= | < | > )'[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+'| IS NULL|IS NOT NULL| LIKE '[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+'| NOT LIKE '[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+')| AND | OR |(\s)?(\(|\))?(\s)?)+)?( ORDER BY [-a-zA-Z0-9_]+ (ASC|DESC)| LIMIT [0-9]+,[0-9]+|$)+/i",$str,$match) != 0 && $str == $match[0])
 		{
 			$str = substr($str,7);
 			$table = strbef($str," ");
@@ -141,8 +141,12 @@ class db {
 			$str = strbef($str," LIMIT ");
 			$order = explode(" ",straft($str," ORDER BY "));
 			$str = strbef($str," ORDER BY ");
-			$str = straft($str,"WHERE ");
-			$this->update($table,$limit,$order,$str);
+			$where = straft($str,"WHERE ");
+			$str = strbef($str,"WHERE ");
+			$set = explode(",",straft($str,"SET "));
+			foreach($set as $id=>$key)
+				$set[$id] = explode(" = '",$key);
+			$this->update($table,$set,$limit,$order,$where);
 		}
 		else
 			self::$error->set("Not a valid mysql query. Query: ".$str);
@@ -208,9 +212,88 @@ class db {
 		}
 	}
 
-	protected function update($table,$limit,$order,$where)
+	protected function update($table,$set,$limit,$order,$where)
 	{
+		$flag = true;
+		$row = null;
 		$cond = changetoLogic($where);
+
+		$fp = fopen(self::$db."mysql","r");
+		while(fscanf($fp,"%s\n",$hash))
+		{
+			$tbarr = $this->json->decode($hash);
+			if($tbarr->name == $table);
+			{
+				$tbf = self::$db.$table;
+				break;
+			}
+		}
+		
+		if(!empty($tbf))
+		{
+			$tbfp = fopen($tbf,"a+");
+			$tbfl = $tbarr->fields;
+			$tbvl = array();
+			$tbup = array();
+			$tbud = array();
+
+			while(fscanf($tbfp,"%s",$hash))
+			{
+				if(!empty($hash))
+				{
+					$row_orig = $this->json->decode($hash);
+					$row = make_assoc_array($tbfl,$row_orig);
+
+					if(!empty($cond))
+						eval("\$flag = (".$cond.");");
+					else
+						$flag = true;
+						
+					if(!$flag)
+						array_push($tbvl,$row_orig);
+					else
+						array_push($tbup,$row_orig);
+				}
+				$flag = true;
+				$hash = null;
+			}
+
+			$order[0] = get_key_index($tbfl,$order[0]);
+
+			if(strtolower($order[1]) == "asc")
+				$tbup = array_key_sort($tbup,$order[0]);
+			else if(strtolower($order[1]) == "desc")
+				$tbup = array_key_rsort($tbup,$order[0]);	
+			
+			if(!empty($limit[0]))
+			{
+				for($i=0;!empty($tbup[$i]);$i++)
+				{
+					if($i<$limit[0] || $i>$limit[1])
+						array_push($tbvl,$tbup[$i]);
+					else
+						array_push($tbud,$tbup[$i]);
+				}
+			}
+			
+			foreach($set as $id=>$key)
+			{
+				for($i=0;!empty($tbud[$i]);$i++)
+				{
+					$ind = get_key_index($tbfl,$key[0]);
+					$tbud[$i][$ind] = stripquotes($key[1],false);
+				}
+			}
+
+			for($i=0;!empty($tbud[$i]);$i++)
+				array_push($tbvl,$tbud[$i]);
+
+			$tbfp = fopen($tbf,"w");
+			foreach($tbvl as $id=>$arr)
+			{
+				fwrite($tbfp,$this->json->encode($arr)."\n");
+			}
+		}
 	}
 
 	protected function deletefrom($table,$limit,$order,$where)

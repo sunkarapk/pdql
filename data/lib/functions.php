@@ -83,9 +83,10 @@ function strbef($haystack, $needle)
 /*
  * Strippng single quotes out of strings
  */
-function stripquotes($str)
+function stripquotes($str,$flag=true)
 {
-	$str = straft($str,"'");
+	if($flag)
+		$str = straft($str,"'");
 	$str = strbef($str,"'");
 	return $str;
 }
