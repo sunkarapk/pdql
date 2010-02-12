@@ -91,6 +91,59 @@ function stripquotes($str)
 }
 
 /*
+ * Sorting an array of arrays according to the key
+ */
+function array_key_sort($big,$key)
+{
+	$n = count($big);
+	for($j=1;$j<$n;$j++)
+	{
+		$buf = $big[$j];
+		$i = $j-1;
+		while($i>=0 && $big[$i][$key]>$buf[$key])
+		{
+			$big[$i+1] = $big[$i];
+			$i--;
+		}
+		$big[$i+1] = $buf;
+	}
+	return $big;
+}
+
+/*
+ * Sorting an array of arrays according to the key
+ */
+function array_key_rsort($big,$key)
+{
+	$n = count($big);
+	for($j=1;$j<$n;$j++)
+	{
+		$buf = $big[$j];
+		$i = $j-1;
+		while($i>=0 && $big[$i][$key]<$buf[$key])
+		{
+			$big[$i+1] = $big[$i];
+			$i--;
+		}
+		$big[$i+1] = $buf;
+	}
+	return $big;
+}
+
+/*
+ * Get index of the given key
+ */
+function get_key_index($fields,$key)
+{
+	for($i=0;!empty($fields[$i]);$i++)
+	{
+		if($fields[$i]->name == $key)
+			return $i;	
+	}
+	return NULL;
+}
+
+/*
  * Changing where condition to logic
  */
 function changetoLogic($str)
