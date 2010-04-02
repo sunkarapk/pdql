@@ -7,15 +7,15 @@
  */
 
  //define(MODE,"cli" or "web"); This should be in the initial including file in app
- define(CWD,dirname(__FILE__)."/");
+ define('CWD', dirname(__FILE__)."/");
 
  if(!defined('MODE'))
  	die('You should define a mode before starting the usage of PDQL');
 
  if(MODE == "cli")
-	define(N,"\n");
+	define('N',"\n");
  else
-	define(N,"<br>");
+	define('N',"<br>");
 
  if(substr(sprintf('%o', fileperms(CWD)), -4) != "0755")
 	die("File permissions not set correctly. Check the INSTALL file".N);
