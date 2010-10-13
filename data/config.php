@@ -17,7 +17,7 @@
  else
 	define(N,"<br>");
 
- if(substr(sprintf('%o', fileperms(CWD)), -4) != "0757")
+ if(substr(sprintf('%o', fileperms(CWD)), -4) != "0755")
 	die("File permissions not set correctly. Check the INSTALL file".N);
 
  if ( !defined('MEMORY_LIMIT') )

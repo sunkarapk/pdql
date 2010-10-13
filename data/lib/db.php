@@ -14,7 +14,7 @@ class db {
 	
 	protected $json;
 
-	public function __construct($dbname,$dbuser,$dbpass,$error=array())
+	public function __construct($dbname,$dbuser,$dbpass,$error=array(NULL, NULL))
 	{
 		self::$error = new error($error[0],$error[1]);
 		$this->json = new Services_JSON();
@@ -194,11 +194,14 @@ class db {
 				$hash = null;
 			}
 
-			if(strtolower($order[1]) == "asc")
-				$tbvl = array_key_sort($tbvl,$order[0]);
-			else if(strtolower($order[1]) == "desc")
-				$tbvl = array_key_rsort($tbvl,$order[0]);
-			
+			if(is_array($order))
+			{
+				if(strtolower($order[1]) == "asc")
+					$tbvl = array_key_sort($tbvl,$order[0]);
+				else if(strtolower($order[1]) == "desc")
+					$tbvl = array_key_rsort($tbvl,$order[0]);
+			}
+
 			$res = $tbvl;
 			
 			if(!empty($limit[0]))
@@ -260,10 +263,13 @@ class db {
 
 			$order[0] = get_key_index($tbfl,$order[0]);
 
-			if(strtolower($order[1]) == "asc")
-				$tbup = array_key_sort($tbup,$order[0]);
-			else if(strtolower($order[1]) == "desc")
-				$tbup = array_key_rsort($tbup,$order[0]);	
+			if(is_array($order))
+			{
+				if(strtolower($order[1]) == "asc")
+					$tbup = array_key_sort($tbup,$order[0]);
+				else if(strtolower($order[1]) == "desc")
+					$tbup = array_key_rsort($tbup,$order[0]);	
+			}
 			
 			if(!empty($limit[0]))
 			{
@@ -343,10 +349,13 @@ class db {
 
 			$order[0] = get_key_index($tbfl,$order[0]);
 
-			if(strtolower($order[1]) == "asc")
-				$tblf = array_key_sort($tblf,$order[0]);
-			else if(strtolower($order[1]) == "desc")
-				$tblf = array_key_rsort($tblf,$order[0]);	
+			if(is_array($order))
+			{
+				if(strtolower($order[1]) == "asc")
+					$tblf = array_key_sort($tblf,$order[0]);
+				else if(strtolower($order[1]) == "desc")
+					$tblf = array_key_rsort($tblf,$order[0]);	
+			}
 			
 			if(!empty($limit[0]))
 			{
