@@ -8,7 +8,7 @@
  
 define('MODE','web');
 
-include_once 'data/config.php';
+include_once '../data/config.php';
 
 define('DBNAME','exdb-web');
 define('DBUSER','pavan');

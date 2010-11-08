@@ -43,13 +43,13 @@ $action = $_GET['a'];
 	}
 	else if($action == "Delete")
 	{
-		$db->query("DELETE FROM users LIMIT ".$_GET['v'].",".$_GET['v']+1);
+		$db->query("DELETE FROM users LIMIT ".$_GET['v'].",".($_GET['v']+1));
 		echo "User deleted<br>Click <a href=index.php>here</a> to continue";
 	}
 	else if($action == "Edit")
 	{
 		$v = $_GET['v'];
-		$r = $db->query("SELECT * FROM users LIMIT $v,".$v+1);
+		$r = $db->query("SELECT * FROM users LIMIT $v,".($v+1));
 		echo "<form action=index.php?a=Update&v=$v method=post>
 			Username: <input type=text value=".$r[0]['username']." name=username><br>
 			Password: <input type=password value=".$r[0]['password']." name=password><br>
@@ -60,7 +60,7 @@ $action = $_GET['a'];
 	else if($action == "Update")
 	{
 		$v = $_GET['v'];
-		$db->query("UPDATE users SET username = '".$_POST['username']."',password = '".$_POST['password']."',cash = '".$_POST['cash']."' LIMIT $v,".$v+1);
+		$db->query("UPDATE users SET username = '".$_POST['username']."',password = '".$_POST['password']."',cash = '".$_POST['cash']."' LIMIT $v,".($v+1));
 		echo "User updated<br>Click <a href=index.php>here</a> to continue";
 	}
 	else if($action == "Insert")
