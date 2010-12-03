@@ -1,0 +1,1 @@
+{"name":"users","fields":[{"name":"username","type":"string","defaults":""},{"name":"password","type":"string","defaults":""},{"name":"cash","type":"integer","defaults":100}]}

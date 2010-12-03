@@ -8,7 +8,7 @@
   
 define('MODE','cli');
 
-include_once 'data/config.php';
+include_once '../data/config.php';
 
 define('DBNAME','exdb-cli');
 define('DBUSER','pavan');

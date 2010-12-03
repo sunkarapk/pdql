@@ -8,4 +8,12 @@
 
 include_once 'config.php';
 
+echo "Database Username & Cash\n";
+
+$r = $db->query("SELECT * FROM users");
+for($i=0; !empty($r[$i]);$i++)
+{
+	echo "\n-------------------------\nName: ".$r[$i]['username']."\nCash: ".$r[$i]['cash']."\n";
+}
+
 ?>

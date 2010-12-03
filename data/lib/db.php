@@ -194,7 +194,7 @@ class db {
 				$hash = null;
 			}
 
-			if(is_array($order) && count($order)==2)
+			if(count($order) == 2)
 			{
 				if(strtolower($order[1]) == "asc")
 					$tbvl = array_key_sort($tbvl,$order[0]);
@@ -263,7 +263,7 @@ class db {
 
 			$order[0] = get_key_index($tbfl,$order[0]);
 
-			if(is_array($order) && count($order)==2)
+			if(count($order) == 2)
 			{
 				if(strtolower($order[1]) == "asc")
 					$tbup = array_key_sort($tbup,$order[0]);
@@ -349,7 +349,7 @@ class db {
 
 			$order[0] = get_key_index($tbfl,$order[0]);
 
-			if(is_array($order) && count($order)==2)
+			if(count($order) == 2)
 			{
 				if(strtolower($order[1]) == "asc")
 					$tblf = array_key_sort($tblf,$order[0]);
