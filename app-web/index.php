@@ -60,7 +60,7 @@ $action = $_GET['a'];
 	else if($action == "Update")
 	{
 		$v = $_GET['v'];
-		$db->query("UPDATE users SET username = '".$_POST['username']."',password = '".$_POST['password']."',cash = '".$_POST['cash']."' LIMIT $v,".($v+1));
+		$db->query("UPDATE users SET username='".$_POST['username']."',password='".$_POST['password']."',cash='".$_POST['cash']."' LIMIT $v,".($v+1));
 		echo "User updated<br>Click <a href=index.php>here</a> to continue";
 	}
 	else if($action == "Insert")

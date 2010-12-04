@@ -10,7 +10,7 @@ include_once 'config.php';
 
 echo "Database Username & Cash\n";
 
-$r = $db->query("SELECT * FROM users");
+$r = $db->query("SELECT * FROM users ORDER BY cash DESC");
 for($i=0; !empty($r[$i]);$i++)
 {
 	echo "\n-------------------------\nName: ".$r[$i]['username']."\nCash: ".$r[$i]['cash']."\n";
