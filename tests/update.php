@@ -8,4 +8,6 @@
 
 include_once 'config.php';
 
+$db->query("UPDATE users SET username='pksunkara' ORDER BY cash DESC LIMIT 2,3");
+
 ?>

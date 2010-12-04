@@ -145,7 +145,7 @@ class db {
 			$str = strbef($str,"WHERE ");
 			$set = explode(",",straft($str,"SET "));
 			foreach($set as $id=>$key)
-				$set[$id] = explode(" = '",$key);
+				$set[$id] = explode("='",$key);
 			$this->update($table,$set,$limit,$order,$where);
 		}
 		else
@@ -270,7 +270,7 @@ class db {
 				else if(strtolower($order[1]) == "desc")
 					$tbup = array_key_rsort($tbup,$order[0]);	
 			}
-			
+
 			if(!empty($limit[0]))
 			{
 				for($i=0;!empty($tbup[$i]);$i++)
