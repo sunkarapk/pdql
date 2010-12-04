@@ -82,7 +82,7 @@ class db {
 	{
 		if(self::$db == NULL)
 			self::$error->set("No database connection found");
-	
+
 		if(preg_match("/^SELECT [\*,-a-zA-Z0-9_]+ FROM [-a-zA-Z0-9_]+( WHERE ([-a-zA-Z0-9_]+((=|!=|<=|>=|<|>)'[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+'| IS NULL|IS NOT NULL| LIKE '[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+'| NOT LIKE '[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+')| AND | OR |(\s)?(\(|\))?(\s)?)+)?( ORDER BY [-a-zA-Z0-9_]+ (ASC|DESC)| LIMIT [0-9]+,[0-9]+|$)+/i",$str,$match) != 0 && $str == $match[0])
 		{
 			$str = substr($str,7);
@@ -148,8 +148,74 @@ class db {
 				$set[$id] = explode("='",$key);
 			$this->update($table,$set,$limit,$order,$where);
 		}
+		else if(preg_match("/^CREATE TABLE [-a-zA-Z0-9_]+ \(([-a-zA-Z0-9_]+ (string|int) (NULL|DEFAULT '[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+'))(,[-a-zA-Z0-9_]+ (string|int) (NULL|DEFAULT '[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+'))*\)$/i",$str,$match) != 0 && $str == $match[0])
+		{
+			$str = substr($str,13);
+			$table = strbef($str," ");
+			$this->checkTableName($table);
+			$str = straft($str," (");
+			$str = strbef($str,")");
+			$fields = explode(",",$str);
+			$this->createtable($table,$fields);
+		}
 		else
 			self::$error->set("Not a valid mysql query. Query: ".$str);
+	}
+
+	protected function createtable($table,$fields)
+	{
+		$tbvl = array();
+		$fld = array();
+	
+		$fp = fopen(self::$db."mysql","r");
+		while(fscanf($fp,"%s\n",$hash))
+		{
+			$tbarr = $this->json->decode($hash);
+			if($tbarr->name == $table)
+			{
+				self::$error->set("Table already exists. Use 'ALTER TABLE' to modify this table.");
+				break;
+			}
+			else
+			{
+				array_push($tbvl,$tbarr);
+			}
+		}
+		
+		foreach($fields as $key=>$val)
+		{
+			$s = explode(" ",$val);
+			$obs = new StdClass();
+			
+			$obs->name = $s[0];
+			$obs->type = $s[1];
+			$obs->defaults = "";
+			if($obs->type == "int")
+			{
+				if(count($s)==4)
+					$s[3] = (int)stripquotes($s[3]);
+				$obs->type = "integer";
+			}
+			if(count($s)==4)
+				$obs->defaults = $s[3];
+			array_push($fld,$obs);
+		}
+		
+		$ntb = new StdClass();
+		$ntb->name = $table;
+		$ntb->fields = $fld;
+		array_push($tbvl,$ntb);
+		
+		$tbfp = fopen(self::$db."mysql","w");
+		foreach($tbvl as $arr)
+		{
+			fwrite($tbfp,$this->json->encode($arr)."\n");
+		}
+		fclose($tbfp);
+		
+		$tbfp = fopen(self::$db.$table,"w");
+		fwrite($tbfp,"");
+		fclose($tbfp);
 	}
 
 	protected function selectfrom($table,$fields,$limit,$order,$where)
