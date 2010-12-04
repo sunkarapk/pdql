@@ -93,9 +93,9 @@ class db {
 			$table = strbef($str," ");
 			$this->checkTableName($table);
 			$str = straft($str," ");
-			$limit = explode(",",straft($str," LIMIT "));
+			$limit = explode(",",straft($str,"LIMIT "));
 			$str = strbef($str," LIMIT ");
-			$order = explode(" ",straft($str," ORDER BY "));
+			$order = explode(" ",straft($str,"ORDER BY "));
 			$str = strbef($str," ORDER BY ");
 			$str = straft($str,"WHERE ");
 			return $this->selectfrom($table,$fields,$limit,$order,$str);
@@ -106,9 +106,9 @@ class db {
 			$table = strbef($str," ");
 			$this->checkTableName($table);
 			$str = straft($str," ");
-			$limit = explode(",",straft($str," LIMIT "));
+			$limit = explode(",",straft($str,"LIMIT "));
 			$str = strbef($str," LIMIT ");
-			$order = explode(" ",straft($str," ORDER BY "));
+			$order = explode(" ",straft($str,"ORDER BY "));
 			$str = strbef($str," ORDER BY ");
 			$str = straft($str,"WHERE ");
 			$this->deletefrom($table,$limit,$order,$str);
@@ -137,9 +137,9 @@ class db {
 			$table = strbef($str," ");
 			$this->checkTableName($table);
 			$str = straft($str," ");
-			$limit = explode(",",straft($str," LIMIT "));
+			$limit = explode(",",straft($str,"LIMIT "));
 			$str = strbef($str," LIMIT ");
-			$order = explode(" ",straft($str," ORDER BY "));
+			$order = explode(" ",straft($str,"ORDER BY "));
 			$str = strbef($str," ORDER BY ");
 			$where = straft($str,"WHERE ");
 			$str = strbef($str,"WHERE ");

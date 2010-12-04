@@ -8,7 +8,7 @@
 
 include_once 'config.php';
 
-$r = $db->query("SELECT * FROM users");
+$r = $db->query("SELECT * FROM users ORDER BY cash DESC");
 
 var_dump($r);
 
