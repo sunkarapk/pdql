@@ -8,4 +8,6 @@
 
 include_once 'config.php';
 
+$db->query("INSERT INTO users VALUES ('pksunkara','pkumar','150')");
+
 ?>

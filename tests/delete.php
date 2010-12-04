@@ -8,4 +8,6 @@
 
 include_once 'config.php';
 
+$db->query("DELETE FROM users WHERE password='pkumar' ORDER BY cash DESC LIMIT 2,3")
+
 ?>

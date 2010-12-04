@@ -275,7 +275,7 @@ class db {
 			{
 				for($i=0;!empty($tbup[$i]);$i++)
 				{
-					if($i<$limit[0] || $i>$limit[1])
+					if($i<$limit[0] || $i>=$limit[1])
 						array_push($tbvl,$tbup[$i]);
 					else
 						array_push($tbud,$tbup[$i]);
@@ -360,7 +360,7 @@ class db {
 			if(!empty($limit[0]))
 			{
 				for($i=0;!empty($tblf[$i]);$i++)
-					if($i<$limit[0] || $i>$limit[1])
+					if($i<$limit[0] || $i>=$limit[1])
 						array_push($tbvl,$tblf[$i]);
 			}
 			
