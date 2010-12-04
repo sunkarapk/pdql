@@ -83,7 +83,7 @@ class db {
 		if(self::$db == NULL)
 			self::$error->set("No database connection found");
 	
-		if(preg_match("/^SELECT [\*,-a-zA-Z0-9_]+ FROM [-a-zA-Z0-9_]+( WHERE ([-a-zA-Z0-9_]+(( = | != | <= | >= | < | > )'[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+'| IS NULL|IS NOT NULL| LIKE '[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+'| NOT LIKE '[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+')| AND | OR |(\s)?(\(|\))?(\s)?)+)?( ORDER BY [-a-zA-Z0-9_]+ (ASC|DESC)| LIMIT [0-9]+,[0-9]+|$)+/i",$str,$match) != 0 && $str == $match[0])
+		if(preg_match("/^SELECT [\*,-a-zA-Z0-9_]+ FROM [-a-zA-Z0-9_]+( WHERE ([-a-zA-Z0-9_]+((=|!=|<=|>=|<|>)'[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+'| IS NULL|IS NOT NULL| LIKE '[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+'| NOT LIKE '[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+')| AND | OR |(\s)?(\(|\))?(\s)?)+)?( ORDER BY [-a-zA-Z0-9_]+ (ASC|DESC)| LIMIT [0-9]+,[0-9]+|$)+/i",$str,$match) != 0 && $str == $match[0])
 		{
 			$str = substr($str,7);
 			$fields = NULL;
@@ -100,7 +100,7 @@ class db {
 			$str = straft($str,"WHERE ");
 			return $this->selectfrom($table,$fields,$limit,$order,$str);
 		}
-		else if(preg_match("/^DELETE FROM [-a-zA-Z0-9_]+( WHERE ([-a-zA-Z0-9_]+(( = | != | <= | >= | < | > )'[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+'| IS NULL|IS NOT NULL| LIKE '[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+'| NOT LIKE '[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+')| AND | OR |(\s)?(\(|\))?(\s)?)+)?( ORDER BY [-a-zA-Z0-9_]+ (ASC|DESC)| LIMIT [0-9]+,[0-9]+|$)+/i",$str,$match) != 0 && $str == $match[0])
+		else if(preg_match("/^DELETE FROM [-a-zA-Z0-9_]+( WHERE ([-a-zA-Z0-9_]+((=|!=|<=|>=|<|>)'[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+'| IS NULL|IS NOT NULL| LIKE '[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+'| NOT LIKE '[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+')| AND | OR |(\s)?(\(|\))?(\s)?)+)?( ORDER BY [-a-zA-Z0-9_]+ (ASC|DESC)| LIMIT [0-9]+,[0-9]+|$)+/i",$str,$match) != 0 && $str == $match[0])
 		{
 			$str = substr($str,12);
 			$table = strbef($str," ");
@@ -131,7 +131,7 @@ class db {
 			$values = explode(",",strbef($str,")"));
 			$this->insertinto($table,$fields,$values);
 		}
-		else if(preg_match("/^UPDATE [-a-zA-Z0-9_]+ SET [-a-zA-Z0-9_]+ = ('NULL'|'[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+'|'DEFAULT')(,[-a-zA-Z0-9_]+ = ('NULL'|'[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+'|'DEFAULT'))*( WHERE ([-a-zA-Z0-9_]+(( = | != | <= | >= | < | > )'[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+'| IS NULL|IS NOT NULL| LIKE '[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+'| NOT LIKE '[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+')| AND | OR |(\s)?(\(|\))?(\s)?)+)?( ORDER BY [-a-zA-Z0-9_]+ (ASC|DESC)| LIMIT [0-9]+,[0-9]+|$)+/i",$str,$match) != 0 && $str == $match[0])
+		else if(preg_match("/^UPDATE [-a-zA-Z0-9_]+ SET [-a-zA-Z0-9_]+=('NULL'|'[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+'|'DEFAULT')(,[-a-zA-Z0-9_]+=('NULL'|'[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+'|'DEFAULT'))*( WHERE ([-a-zA-Z0-9_]+((=|!=|<=|>=|<|>)'[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+'| IS NULL|IS NOT NULL| LIKE '[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+'| NOT LIKE '[%-a-zA-Z0-9_\/\(\)\s:;,@\.]+')| AND | OR |(\s)?(\(|\))?(\s)?)+)?( ORDER BY [-a-zA-Z0-9_]+ (ASC|DESC)| LIMIT [0-9]+,[0-9]+|$)+/i",$str,$match) != 0 && $str == $match[0])
 		{
 			$str = substr($str,7);
 			$table = strbef($str," ");

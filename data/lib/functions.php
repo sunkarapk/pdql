@@ -152,7 +152,7 @@ function changetoLogic($str)
 	$newStr = array('\$flag = ');
 	$allow = array('(',' ',')','=','!','>','<','\'');
 	$special = array('AND','OR','IS NULL','IS NOT NULL','LIKE','NOT LIKE');
-	$specialTo = array('&&','||','== NULL','!= NULL','==','!=');
+	$specialTo = array('&&','||','==NULL','!=NULL','==','!=');
 	$nonBreak = array('IS','NOT','IS NOT');
 	$incBreak = array(1,2,4);
 	
@@ -161,7 +161,13 @@ function changetoLogic($str)
 		$flag = 0;
 		$c = $str[$i];
 		if(in_array($c,$allow))
-			array_push($newStr,$c);
+		{
+			if($c == '=') {
+				array_push($newStr,'==');
+			} else{
+				array_push($newStr,$c);
+			}
+		}
 		else
 		{
 			$sign = array_pop($newStr);
@@ -197,10 +203,15 @@ function changetoLogic($str)
 						}
 					
 					if($flag == 0)
-						$buf = "\$row[".$buf."]";
+						$buf = "\$row['".$buf."']";
 						
 					array_push($newStr,$buf);
-					array_push($newStr,$c);
+
+					if($c == '=') {
+						array_push($newStr,'==');
+					} else{
+						array_push($newStr,$c);
+					}
 					
 					if($break == 0)
 						break;
