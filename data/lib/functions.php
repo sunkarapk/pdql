@@ -7,13 +7,6 @@
  */
 
 /*
- * Printing function for arrays and objects
- */
-function pr($obj) {
-	print_r($obj,true);
-}
-
-/*
  * Recursive function for converting an array into object
  */
 function atoo($arr) 

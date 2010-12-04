@@ -10,7 +10,7 @@ define('MODE','cli');
 
 include_once '../data/config.php';
 
-define('DBNAME','exdb-web');
+define('DBNAME','test-db');
 define('DBUSER','pavan');
 define('DBPASS','pkumar');
 
