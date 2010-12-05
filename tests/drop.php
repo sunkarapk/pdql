@@ -8,6 +8,6 @@
 
 include_once 'config.php';
 
-$db->query("CREATE TABLE shoppers (name string NULL,credit int DEFAULT '100')");
+$db->query("DROP TABLE shoppers");
 
 ?>

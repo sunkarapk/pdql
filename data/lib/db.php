@@ -158,8 +158,37 @@ class db {
 			$fields = explode(",",$str);
 			$this->createtable($table,$fields);
 		}
+		else if(preg_match("/^DROP TABLE [-a-zA-Z0-9_]+$/i",$str,$match)!=0 && $str==$match[0])
+		{
+			$table = substr($str,11);
+			$this->checkTableName($table);
+			$this->droptable($table);
+		}
 		else
 			self::$error->set("Not a valid mysql query. Query: ".$str);
+	}
+
+	protected function droptable($table)
+	{
+		$tbvl = array();
+		
+		$fp = fopen(self::$db."mysql","r");
+		while(fscanf($fp,"%s\n",$hash))
+		{
+			$tbarr = $this->json->decode($hash);
+			if($tbarr->name!=$table)
+				array_push($tbvl,$tbarr);
+		}
+		fclose($fp);
+		
+		unlink(self::$db.$table);
+		
+		$tbfp = fopen(self::$db."mysql","w");
+		foreach($tbvl as $arr)
+		{
+			fwrite($tbfp,$this->json->encode($arr)."\n");
+		}
+		fclose($tbfp);
 	}
 
 	protected function createtable($table,$fields)
@@ -177,9 +206,7 @@ class db {
 				break;
 			}
 			else
-			{
 				array_push($tbvl,$tbarr);
-			}
 		}
 		
 		foreach($fields as $key=>$val)
